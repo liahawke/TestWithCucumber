@@ -39,7 +39,7 @@ public class ProductPage extends AbstractPage {
      */
     public String parseExpectedBreadcrumbs() {
         String expectedBreadCrumbs =
-                "> Women>"
+                "> "+clothes.TSHIRTS.getGeneralName()+">"
                         + clothes.TSHIRTS.getCategoryName()
                         + ">"
                         + clothes.TSHIRTS.getSubcategoryName()
