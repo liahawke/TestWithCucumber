@@ -7,11 +7,8 @@ import org.openqa.selenium.support.FindBy;
 
 public class AccountPage extends AbstractPage {
 
-    // User name
-    private final String USERNAME = "Lia Hawke";
-
     // Web Elements
-    @FindBy(xpath = "//a[@title='View my customer account']")
+    @FindBy(xpath = "//a[@class='account']//span")
     private WebElement userName;
 
     /**
@@ -21,12 +18,17 @@ public class AccountPage extends AbstractPage {
      */
     public AccountPage(BaseTest baseTest) {
         super(baseTest);
-        baseTest.waitTillElementIsVisible(divPage);
     }
 
-    /** Verify username */
-    public void verifyName() {
-        Assert.assertEquals("User name is wrong", USERNAME, userName.getText());
+    /**
+     * Get current user name
+     *
+     * @return current user name
+     */
+    public String getCurrentUsername(){
+        baseTest.waitTillElementIsVisible(userName);
+        return userName.getText();
     }
+
 }
 

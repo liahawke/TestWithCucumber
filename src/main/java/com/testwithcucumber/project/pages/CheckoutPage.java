@@ -29,10 +29,9 @@ public class CheckoutPage extends AbstractPage {
     @FindBy(xpath = "//a[contains(@title, 'Delete')]")
     private WebElement deleteBtn;
 
+
     @FindBy(xpath = "//p[@class='alert alert-warning']")
     private WebElement emptyCardMessage;
-
-    private String EMPTY_CARD_MESSAGE = "Your shopping cart is empty.";
 
     /**
      * Constructor
@@ -51,16 +50,14 @@ public class CheckoutPage extends AbstractPage {
         baseTest.waitTillTextAppears(prodQuantity, "2");
     }
 
-    /** Check if total price was recalculated after changing product quantity */
-    public void checkPrice() {
-        float actualPrice =
-                (Float.parseFloat(prodPrice.getText().substring(1))
-                        * Float.parseFloat(hiddenQuantity.getAttribute("value")))
-                        + Float.parseFloat(shippingPrice.getText().substring(1));
-        Assert.assertEquals(
-                "Price is different!",
-                String.valueOf(actualPrice),
-                totalPrice.getText().substring(1));
+    /**
+     * Get current price
+     *
+     * @return current price
+     */
+    public String getTotalPrice(){
+        baseTest.waitTillElementIsVisible(totalPrice);
+        return totalPrice.getText();
     }
 
     /** Delete product from the cart */
@@ -69,9 +66,15 @@ public class CheckoutPage extends AbstractPage {
         deleteBtn.click();
     }
 
-    /** Check title if cart is empty */
-    public void checkTitle() {
+
+    /**
+     * Get empty cart message
+     *
+     * @return Empty cart text
+     */
+    public String getEmptyCartMessage(){
         baseTest.waitTillElementIsVisible(emptyCardMessage);
-        Assert.assertEquals("Card isn't empty!", EMPTY_CARD_MESSAGE, emptyCardMessage.getText());
+        return emptyCardMessage.getText();
     }
+
 }

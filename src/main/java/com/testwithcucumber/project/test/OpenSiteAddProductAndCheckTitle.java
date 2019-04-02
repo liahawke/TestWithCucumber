@@ -6,8 +6,11 @@ import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.junit.Assert;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 
 public class OpenSiteAddProductAndCheckTitle extends BaseTest {
+
     private HomePage homePage;
     private LoginPage loginPage;
     private AccountPage accountPage;
@@ -17,7 +20,10 @@ public class OpenSiteAddProductAndCheckTitle extends BaseTest {
 
     private String productName = "Faded Short Sleeve T-shirts";
 
-    private String actualUserName;
+    private String accountName;
+    private String  currentBreadcrumbs;
+    private String currentPrice;
+    private String currentTitle;
 
     @Given("The user opens site sees Home Page")
     public void theUserOpensSiteSeesHomePage() {
@@ -34,7 +40,12 @@ public class OpenSiteAddProductAndCheckTitle extends BaseTest {
 
     @When("He verifies username on Account Page")
     public void heVerifiesUsernameOnAccountPage() {
-        accountPage.verifyName();
+        accountName = accountPage.getCurrentUsername();
+    }
+
+    @Then("Account name is '([^\"]*)'")
+    public void usernameIs(String expectedName) {
+        Assert.assertEquals("User name is wrong", expectedName, accountName);
     }
 
     @When("He clicks on T-shirts link, gets Listing Page")
@@ -44,7 +55,12 @@ public class OpenSiteAddProductAndCheckTitle extends BaseTest {
     public void heClicksOnProductLinkAndGetsProductPage() { productPage = listingPage.clickOnProduct(productName); }
 
     @When("He checks breadcrumbs")
-    public void heChecksBreabcrumbs() { productPage.checkBreadcrumbs(productPage.parseExpectedBreadcrumbs()); }
+    public void heChecksBreabcrumbs() { currentBreadcrumbs = productPage.getBreadcrumbs(); }
+
+    @Then("Breadcrumb is '([^\"]*)'")
+    public void breadcrumbIs(String expectedBreadcrumb) {
+        Assert.assertEquals("Breadcrumb is wrong", expectedBreadcrumb, currentBreadcrumbs);
+    }
 
     @When("He click add button and adds products to cart")
     public void heClickAddBtnAddProductToCart() { productPage.clickAddBtn(); }
@@ -56,13 +72,22 @@ public class OpenSiteAddProductAndCheckTitle extends BaseTest {
     public void heIncreaseQuantityOfProduct() { checkoutPage.clickPlusBtn(); }
 
     @When("He checks product price")
-    public void heChecksProductPrice() { checkoutPage.checkPrice(); }
+    public void heChecksProductPrice() { currentPrice = checkoutPage.getTotalPrice(); }
 
+    @Then("Price is '([^\"]*)'")
+    public void priceIs(String expectedPrice) {
+        Assert.assertEquals("Price is different!", expectedPrice, currentPrice);
+    }
     @When("He deletes product from the cart")
     public void heDeletesProductFromCart() { checkoutPage.deleteProduct(); }
 
     @When("He checks title on empty cart page")
-    public void heChecksTitleOnEmptyCartPage() { checkoutPage.checkTitle(); }
+    public void heChecksTitleOnEmptyCartPage() { currentTitle = checkoutPage.getEmptyCartMessage(); }
+
+    @Then("Title is '([^\"]*)'")
+    public void titleIs(String expectedTitle) {
+        Assert.assertEquals("Card isn't empty!", expectedTitle, currentTitle);
+    }
 
     @Then("User closes browser")
     public void userClosesBrowser() {

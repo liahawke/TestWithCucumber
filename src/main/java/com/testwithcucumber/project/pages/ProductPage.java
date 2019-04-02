@@ -7,8 +7,6 @@ import org.openqa.selenium.support.FindBy;
 
 public class ProductPage extends AbstractPage {
 
-    @FindBy(xpath = "//div[@class='breadcrumb clearfix']")
-    private WebElement breadCrums;
 
     @FindBy(xpath = "//*[@id='add_to_cart']/button/span")
     private WebElement addToCardBtn;
@@ -22,6 +20,9 @@ public class ProductPage extends AbstractPage {
     @FindBy(xpath = "//h1[@itemprop='name']")
     private WebElement productName;
 
+    @FindBy(xpath = "//div[@class='breadcrumb clearfix']")
+    private WebElement breadCrumbs;
+
     /**
      * Constructor
      *
@@ -32,31 +33,6 @@ public class ProductPage extends AbstractPage {
         baseTest.waitTillElementIsVisible(divPage);
     }
 
-    /**
-     * Parse Expected Breadcrumbs
-     *
-     * @return String with expected Breadcrumbs
-     */
-    public String parseExpectedBreadcrumbs() {
-        String expectedBreadCrumbs =
-                "> "+clothes.TSHIRTS.getGeneralName()+">"
-                        + clothes.TSHIRTS.getCategoryName()
-                        + ">"
-                        + clothes.TSHIRTS.getSubcategoryName()
-                        + ">"
-                        + productName.getText();
-        return expectedBreadCrumbs;
-    }
-
-    /**
-     * Check is breadcrumbs is correct
-     *
-     * @param expectedBreadCrumbs
-     */
-    public void checkBreadcrumbs(String expectedBreadCrumbs) {
-        baseTest.waitTillElementIsVisible(breadCrums);
-        Assert.assertEquals("Breadcrum is different!", expectedBreadCrumbs, breadCrums.getText());
-    }
 
     /** Click on Add product button */
     public void clickAddBtn() {
@@ -74,5 +50,15 @@ public class ProductPage extends AbstractPage {
         baseTest.waitTillElementIsVisible(checkoutBtn);
         checkoutBtn.click();
         return new CheckoutPage(baseTest);
+    }
+
+    /**
+     * Get current breadcrumb
+     *
+     * @return current breadcrumb
+     */
+    public String getBreadcrumbs(){
+        baseTest.waitTillElementIsVisible(breadCrumbs);
+        return breadCrumbs.getText();
     }
 }
